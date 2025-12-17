@@ -1,0 +1,282 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif;
+    overflow: hidden;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #000;
+}
+
+/* 背景画像 */
+#background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: opacity 0.5s ease;
+}
+
+/* キャラクター表示エリア */
+#character-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.character {
+    position: absolute;
+    bottom: 0;
+    width: 400px;
+    height: 600px;
+    background-size: contain;
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#character-left {
+    left: 10%;
+    transform: translateX(-100px);
+}
+
+#character-center {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#character-right {
+    right: 10%;
+    transform: translateX(100px);
+}
+
+.character.visible {
+    opacity: 1;
+}
+
+.character.visible#character-left {
+    transform: translateX(0);
+}
+
+.character.visible#character-center {
+    transform: translateX(-50%);
+}
+
+.character.visible#character-right {
+    transform: translateX(0);
+}
+
+/* テキストボックス */
+#text-box {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 900px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 3px solid #ffffff;
+    border-radius: 10px;
+    padding: 20px 30px;
+    color: #ffffff;
+    font-size: 20px;
+    line-height: 1.8;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#text-box.visible {
+    opacity: 1;
+}
+
+#name-plate {
+    position: absolute;
+    top: -30px;
+    left: 30px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #ffffff;
+    border-radius: 5px;
+    padding: 5px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+#dialogue-text {
+    min-height: 60px;
+}
+
+#continue-indicator {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    font-size: 24px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+/* 選択肢表示エリア */
+#choice-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 100;
+}
+
+.choice-button {
+    background: rgba(0, 0, 0, 0.85);
+    border: 3px solid #ffffff;
+    border-radius: 10px;
+    padding: 20px 40px;
+    color: #ffffff;
+    font-size: 22px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 400px;
+    text-align: center;
+}
+
+.choice-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+    border-color: #ffcc00;
+}
+
+/* スタート画面 */
+#start-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.5s ease;
+}
+
+#start-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#start-screen h1 {
+    font-size: 48px;
+    color: #ffffff;
+    margin-bottom: 50px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#start-button {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50px;
+    padding: 20px 60px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #667eea;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+#start-button:hover {
+    background: #ffffff;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ユーティリティクラス */
+.hidden {
+    display: none !important;
+}
+
+/* アニメーションクラス */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+
+.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.fade-out {
+    animation: fadeOut 0.5s ease;
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInCenter {
+    from {
+        transform: translateX(-50%) translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}

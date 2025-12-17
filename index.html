@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アドベンチャーゲーム</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- 背景画像 -->
+        <div id="background"></div>
+
+        <!-- キャラクター表示エリア -->
+        <div id="character-container">
+            <div id="character-left" class="character"></div>
+            <div id="character-center" class="character"></div>
+            <div id="character-right" class="character"></div>
+        </div>
+
+        <!-- テキストボックス -->
+        <div id="text-box">
+            <div id="name-plate"></div>
+            <div id="dialogue-text"></div>
+            <div id="continue-indicator">▼</div>
+        </div>
+
+        <!-- 選択肢表示エリア -->
+        <div id="choice-container" class="hidden"></div>
+
+        <!-- スタート画面 -->
+        <div id="start-screen">
+            <h1>アドベンチャーゲーム</h1>
+            <button id="start-button">スタート</button>
+        </div>
+    </div>
+
+    <script src="js/game.js"></script>
+</body>
+</html>

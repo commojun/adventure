@@ -1,0 +1,166 @@
+[
+  {
+    "scene_id": "scene001",
+    "order": 1,
+    "type": "dialogue",
+    "character_id": "-",
+    "text": "ある晴れた日の朝、学校の教室で...",
+    "position": "center",
+    "effect": "-",
+    "background": "assets/images/backgrounds/classroom.jpg",
+    "next_scene": "scene002"
+  },
+  {
+    "scene_id": "scene002",
+    "order": 2,
+    "type": "dialogue",
+    "character_id": "char001",
+    "text": "おはよう！今日もいい天気だね！",
+    "position": "center",
+    "effect": "slide_in",
+    "background": "-",
+    "next_scene": "scene003"
+  },
+  {
+    "scene_id": "scene003",
+    "order": 3,
+    "type": "dialogue",
+    "character_id": "char002",
+    "text": "太郎くん、おはよう。今日は体育祭の準備があるんだよね。",
+    "position": "left",
+    "effect": "slide_in",
+    "background": "-",
+    "next_scene": "scene004"
+  },
+  {
+    "scene_id": "scene004",
+    "order": 4,
+    "type": "dialogue",
+    "character_id": "char001",
+    "text": "そうそう！でも、まだ準備が終わってないんだ...",
+    "position": "center",
+    "effect": "shake",
+    "background": "-",
+    "next_scene": "scene005"
+  },
+  {
+    "scene_id": "scene005",
+    "order": 5,
+    "type": "dialogue",
+    "character_id": "char002",
+    "text": "困ったね...どうする？",
+    "position": "left",
+    "effect": "-",
+    "background": "-",
+    "next_scene": "scene006"
+  },
+  {
+    "scene_id": "scene006",
+    "order": 6,
+    "type": "choice",
+    "character_id": "-",
+    "text": "",
+    "position": "-",
+    "effect": "-",
+    "background": "-",
+    "next_scene": "-",
+    "choices": [
+      {
+        "text": "一緒に準備を手伝ってもらう",
+        "next_scene": "scene007"
+      },
+      {
+        "text": "自分一人で頑張る",
+        "next_scene": "scene010"
+      }
+    ]
+  },
+  {
+    "scene_id": "scene007",
+    "order": 7,
+    "type": "dialogue",
+    "character_id": "char001",
+    "text": "花子ちゃん、一緒に手伝ってくれないかな？",
+    "position": "center",
+    "effect": "-",
+    "background": "-",
+    "next_scene": "scene008"
+  },
+  {
+    "scene_id": "scene008",
+    "order": 8,
+    "type": "dialogue",
+    "character_id": "char002",
+    "text": "もちろん！一緒に頑張ろう！",
+    "position": "left",
+    "effect": "-",
+    "background": "-",
+    "next_scene": "scene009"
+  },
+  {
+    "scene_id": "scene009",
+    "order": 9,
+    "type": "dialogue",
+    "character_id": "char001",
+    "text": "ありがとう！二人なら大丈夫だね！",
+    "position": "center",
+    "effect": "-",
+    "background": "-",
+    "next_scene": "scene013"
+  },
+  {
+    "scene_id": "scene010",
+    "order": 10,
+    "type": "dialogue",
+    "character_id": "char001",
+    "text": "大丈夫、自分でやってみるよ！",
+    "position": "center",
+    "effect": "-",
+    "background": "-",
+    "next_scene": "scene011"
+  },
+  {
+    "scene_id": "scene011",
+    "order": 11,
+    "type": "dialogue",
+    "character_id": "char002",
+    "text": "そう...頑張ってね。",
+    "position": "left",
+    "effect": "-",
+    "background": "-",
+    "next_scene": "scene012"
+  },
+  {
+    "scene_id": "scene012",
+    "order": 12,
+    "type": "dialogue",
+    "character_id": "char001",
+    "text": "...やっぱり一人じゃ大変だったな。",
+    "position": "center",
+    "effect": "shake",
+    "background": "-",
+    "next_scene": "scene013"
+  },
+  {
+    "scene_id": "scene013",
+    "order": 13,
+    "type": "dialogue",
+    "character_id": "-",
+    "text": "そして、体育祭の日がやってきた...",
+    "position": "center",
+    "effect": "-",
+    "background": "assets/images/backgrounds/schoolyard.jpg",
+    "next_scene": "scene014"
+  },
+  {
+    "scene_id": "scene014",
+    "order": 14,
+    "type": "dialogue",
+    "character_id": "char003",
+    "text": "みんな！よく頑張ったね！最高の体育祭になったよ！",
+    "position": "right",
+    "effect": "slide_in",
+    "background": "-",
+    "next_scene": "end"
+  }
+]

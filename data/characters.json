@@ -1,0 +1,20 @@
+{
+  "char001": {
+    "id": "char001",
+    "name": "太郎",
+    "image_path": "assets/images/characters/taro.png",
+    "default_position": "center"
+  },
+  "char002": {
+    "id": "char002",
+    "name": "花子",
+    "image_path": "assets/images/characters/hanako.png",
+    "default_position": "left"
+  },
+  "char003": {
+    "id": "char003",
+    "name": "次郎",
+    "image_path": "assets/images/characters/jiro.png",
+    "default_position": "right"
+  }
+}

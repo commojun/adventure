@@ -1,0 +1,24 @@
+# Google Cloud認証情報
+tools/credentials.json
+tools/.env
+
+# 画像ファイル（サイズが大きいため）
+# 必要に応じてコメントアウト
+# assets/images/**/*.png
+# assets/images/**/*.jpg
+
+# macOS
+.DS_Store
+
+# エディタ
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ログ
+*.log
+
+# Go
+tools/go.sum
