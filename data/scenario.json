@@ -16,8 +16,19 @@
     "type": "dialogue",
     "character_id": "char001",
     "text": "おはよう！今日もいい天気だね！",
-    "position": "center",
+    "position": "right",
     "effect": "slide_in",
+    "background": "-",
+    "next_scene": "scene002a"
+  },
+  {
+    "scene_id": "scene002a",
+    "order": 2.5,
+    "type": "hide_character",
+    "character_id": "-",
+    "text": "",
+    "position": "right",
+    "effect": "slide_out",
     "background": "-",
     "next_scene": "scene003"
   },
@@ -49,8 +60,8 @@
     "type": "dialogue",
     "character_id": "char002",
     "text": "困ったね...どうする？",
-    "position": "left",
-    "effect": "-",
+    "position": "-",
+    "effect": "slide_out",
     "background": "-",
     "next_scene": "scene006"
   },

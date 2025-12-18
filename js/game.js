@@ -76,13 +76,6 @@ class GameEngine {
                 this.elements.startScreen.style.backgroundImage = `url('${titleConfig.background}')`;
                 this.elements.startScreen.style.backgroundSize = 'cover';
                 this.elements.startScreen.style.backgroundPosition = 'center';
-                // グラデーションを半透明にして背景画像が見えるように
-                this.elements.startScreen.style.background = `
-                    linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%),
-                    url('${titleConfig.background}')
-                `;
-                this.elements.startScreen.style.backgroundSize = 'cover';
-                this.elements.startScreen.style.backgroundPosition = 'center';
             }
 
             console.log('タイトル設定読み込み完了:', titleConfig);
@@ -165,6 +158,14 @@ class GameEngine {
             this.isWaitingForInput = true;
         } else if (scene.type === 'choice') {
             this.showChoices(scene);
+        } else if (scene.type === 'hide_character') {
+            // キャラクター非表示
+            this.characterManager.hideCharacter(scene.position, scene.effect);
+            // 自動的に次のシーンへ進む
+            setTimeout(() => {
+                this.currentSceneIndex++;
+                this.playScene();
+            }, 300); // アニメーション時間を考慮
         }
     }
 
@@ -286,6 +287,9 @@ class CharacterManager {
         // 画像を設定
         element.style.backgroundImage = `url('${character.image_path}')`;
 
+        // 前回のインラインスタイルをクリア（再登場対応）
+        element.style.opacity = '';
+
         // エフェクトを適用
         if (effect === 'slide_in') {
             element.classList.remove('visible');
@@ -319,10 +323,19 @@ class CharacterManager {
 
         if (!element) return;
 
-        if (effect === 'slide_out' || effect === 'fade') {
+        if (effect === 'fade') {
+            // フェード: その場で透明に（位置は変わらない）
+            element.style.opacity = '0';
+            // アニメーション終了後にvisibleクラスを削除
+            setTimeout(() => {
+                element.classList.remove('visible');
+            }, 300);
+        } else if (effect === 'slide_out') {
+            // スライドアウト: 横にスライドしながら消える
             element.classList.remove('visible');
         } else {
-            element.style.opacity = '0';
+            // デフォルト: 単純に非表示
+            element.classList.remove('visible');
         }
 
         this.currentCharacters[positionKey] = null;

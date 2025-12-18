@@ -86,24 +86,46 @@ npx http-server
 |----------|-------|------|--------------|------|----------|--------|------------|------------|
 | scene001 | 1 | dialogue | char001 | こんにちは！ | center | slide_in | assets/images/backgrounds/classroom.jpg | scene002 |
 | scene002 | 2 | dialogue | char002 | 元気？ | left | shake | - | scene003 |
-| scene003 | 3 | choice | - | | - | - | - | - |
+| scene003 | 3 | hide_character | - | | center | slide_out | - | scene004 |
+| scene004 | 4 | choice | - | | - | - | - | - |
 
 **カラム説明:**
 - `scene_id`: シーンの一意なID
 - `order`: 表示順序
-- `type`: `dialogue`（台詞）または `choice`（選択肢）
-- `character_id`: 話すキャラクターのID（ナレーションの場合は`-`）
-- `text`: 表示するテキスト
+- `type`: シーンタイプ
+  - `dialogue`：台詞表示
+  - `choice`：選択肢表示
+  - `hide_character`：キャラクター非表示
+- `character_id`: 話すキャラクターのID（ナレーションや`hide_character`の場合は`-`）
+- `text`: 表示するテキスト（`hide_character`の場合は空欄）
 - `position`: キャラクター位置（left/center/right）
+  - `hide_character`の場合、非表示にするキャラクターの位置を指定
 - `effect`: 演出効果（詳細は後述）
 - `background`: 背景画像のパス（変更しない場合は`-`）
 - `next_scene`: 次のシーンID
 
+**シーンタイプ別の使い方:**
+
+**dialogue（台詞）:**
+- キャラクターの台詞やナレーションを表示
+- `character_id`にキャラクターIDを指定（ナレーションは`-`）
+- `text`に表示するテキストを入力
+
+**choice（選択肢）:**
+- プレイヤーに選択肢を表示
+- `choices`シートで選択肢の内容を定義
+
+**hide_character（キャラクター非表示）:**
+- キャラクターを画面から退場させる
+- `position`に非表示にするキャラクターの位置（left/center/right）を指定
+- `effect`に退場エフェクト（slide_out/fade）を指定
+- クリック不要で自動的に次のシーンへ進む
+
 **演出効果 (effect):**
-- `slide_in`: スライドイン
-- `slide_out`: スライドアウト
+- `slide_in`: スライドイン（登場）
+- `slide_out`: スライドアウト（退場）
 - `shake`: 振動
-- `fade`: フェード
+- `fade`: フェード（登場・退場両方で使用可）
 - `-`: 演出なし
 
 #### シート4: `choices` (選択肢)
@@ -185,23 +207,35 @@ export $(cat .env | xargs) && go run import.go
 
 ### 基本的な流れ
 1. ナレーション（`character_id: -`）でシーンを説明
-2. キャラクターを登場させる（`effect: slide_in`）
+2. キャラクターを登場させる（`type: dialogue`, `effect: slide_in`）
 3. 会話を進める
-4. 必要に応じて選択肢を配置（`type: choice`）
-5. 選択肢後のシーンを `scene_id` で管理
+4. キャラクターを退場させる（`type: hide_character`, `effect: slide_out`）
+5. 必要に応じて選択肢を配置（`type: choice`）
+6. 選択肢後のシーンを `scene_id` で管理
 
 ### 演出の使い方
+
+**キャラクター登場:**
 ```
-# キャラクター登場
+type: dialogue
 effect: slide_in
+```
 
-# 驚きや衝撃
+**キャラクター退場:**
+```
+type: hide_character
+position: center  (退場させる位置)
+effect: slide_out (または fade)
+```
+
+**驚きや衝撃:**
+```
+type: dialogue
 effect: shake
+```
 
-# キャラクター退場
-effect: slide_out
-
-# 背景をゆっくり変更
+**背景をゆっくり変更:**
+```
 background: new_bg.jpg  (自動的にフェード)
 ```
 
