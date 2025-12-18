@@ -21,6 +21,7 @@ adventure/
 ├── js/
 │   └── game.js            # ゲームエンジン
 ├── data/
+│   ├── title.json         # タイトル設定
 │   ├── characters.json    # キャラクターマスタ
 │   └── scenario.json      # シナリオデータ
 ├── assets/
@@ -51,9 +52,21 @@ npx http-server
 
 ### 2. Googleスプレッドシートの準備
 
-スプレッドシートを作成し、以下の3つのシートを用意：
+スプレッドシートを作成し、以下の4つのシートを用意：
 
-#### シート1: `characters` (キャラクターマスタ)
+#### シート1: `title` (タイトル設定)
+
+| title | background |
+|-------|------------|
+| アドベンチャーゲーム | assets/images/backgrounds/title.jpg |
+
+**カラム説明:**
+- `title`: ゲームのタイトル（タイトル画面に表示）
+- `background`: タイトル画面の背景画像のパス
+
+**注意:** このシートはオプションです。存在しない場合はデフォルトのタイトルが使用されます。
+
+#### シート2: `characters` (キャラクターマスタ)
 
 | id | name | image_path | default_position |
 |----|------|------------|------------------|
@@ -67,7 +80,7 @@ npx http-server
 - `image_path`: 立ち絵画像のパス
 - `default_position`: デフォルト位置（left/center/right）
 
-#### シート2: `scenarios` (シナリオ)
+#### シート3: `scenarios` (シナリオ)
 
 | scene_id | order | type | character_id | text | position | effect | background | next_scene |
 |----------|-------|------|--------------|------|----------|--------|------------|------------|
@@ -93,7 +106,7 @@ npx http-server
 - `fade`: フェード
 - `-`: 演出なし
 
-#### シート3: `choices` (選択肢)
+#### シート4: `choices` (選択肢)
 
 | scene_id | choice_text | next_scene |
 |----------|-------------|------------|
@@ -142,6 +155,31 @@ export $(cat .env | xargs) && go run import.go
 - パス: `assets/images/backgrounds/`
 - 推奨サイズ: 1920px × 1080px
 - 形式: JPG または PNG
+
+## タイトル設定のカスタマイズ
+
+タイトル画面のタイトルテキストと背景画像は `data/title.json` で設定できます。
+
+### JSONで直接編集する場合
+
+`data/title.json` を編集：
+
+```json
+{
+  "title": "あなたのゲームタイトル",
+  "background": "assets/images/backgrounds/title.jpg"
+}
+```
+
+### Googleスプレッドシートで管理する場合
+
+`title` シートを作成し、インポートスクリプトを実行すると自動的に `title.json` が生成されます。
+
+| title | background |
+|-------|------------|
+| あなたのゲームタイトル | assets/images/backgrounds/title.jpg |
+
+**注意:** 背景画像はグラデーションと重ねて表示されます。画像が見えやすいよう、明るめの画像を推奨します。
 
 ## 台本の書き方のコツ
 

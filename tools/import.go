@@ -40,6 +40,12 @@ type Choice struct {
 	NextScene string `json:"next_scene"`
 }
 
+// タイトル構造体
+type Title struct {
+	Title      string `json:"title"`
+	Background string `json:"background"`
+}
+
 func main() {
 	// 環境変数から設定を取得
 	spreadsheetID := os.Getenv("SPREADSHEET_ID")
@@ -80,6 +86,13 @@ func main() {
 	// シナリオに選択肢をマージ
 	scenarios = mergeChoices(scenarios, choices)
 
+	// タイトルデータの読み込み
+	title, err := readTitle(srv, spreadsheetID)
+	if err != nil {
+		log.Printf("警告: タイトルデータの読み込みに失敗（スキップ）: %v", err)
+		// タイトルはオプションなので、エラーでも続行
+	}
+
 	// JSONファイルとして出力
 	if err := saveCharactersJSON(characters); err != nil {
 		log.Fatalf("キャラクターJSONの保存に失敗: %v", err)
@@ -89,9 +102,18 @@ func main() {
 		log.Fatalf("シナリオJSONの保存に失敗: %v", err)
 	}
 
+	if title != nil {
+		if err := saveTitleJSON(*title); err != nil {
+			log.Fatalf("タイトルJSONの保存に失敗: %v", err)
+		}
+	}
+
 	fmt.Println("✓ データのインポートが完了しました")
 	fmt.Printf("  - キャラクター: %d件\n", len(characters))
 	fmt.Printf("  - シナリオ: %d件\n", len(scenarios))
+	if title != nil {
+		fmt.Printf("  - タイトル: %s\n", title.Title)
+	}
 }
 
 // キャラクターシートを読み込む
@@ -228,4 +250,41 @@ func toString(val interface{}) string {
 		return ""
 	}
 	return fmt.Sprintf("%v", val)
+}
+
+// タイトルシートを読み込む
+func readTitle(srv *sheets.Service, spreadsheetID string) (*Title, error) {
+	readRange := "title!A2:B2" // ヘッダー行を除く、1行のみ
+	resp, err := srv.Spreadsheets.Values.Get(spreadsheetID, readRange).Do()
+	if err != nil {
+		return nil, fmt.Errorf("タイトルシートの読み込みエラー: %v", err)
+	}
+
+	if len(resp.Values) == 0 || len(resp.Values[0]) < 2 {
+		return nil, fmt.Errorf("タイトルシートにデータがありません")
+	}
+
+	row := resp.Values[0]
+	title := &Title{
+		Title:      toString(row[0]),
+		Background: toString(row[1]),
+	}
+
+	return title, nil
+}
+
+// タイトルJSONを保存
+func saveTitleJSON(title Title) error {
+	data, err := json.MarshalIndent(title, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	outputPath := "../data/title.json"
+	if err := os.WriteFile(outputPath, data, 0644); err != nil {
+		return err
+	}
+
+	fmt.Printf("✓ %s を保存しました\n", outputPath)
+	return nil
 }

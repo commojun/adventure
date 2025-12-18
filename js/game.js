@@ -34,7 +34,10 @@ class GameEngine {
         this.init();
     }
 
-    init() {
+    async init() {
+        // タイトル設定を読み込み
+        await this.loadTitleConfig();
+
         // スタートボタンのイベント設定
         this.elements.startButton.addEventListener('click', () => this.startGame());
 
@@ -55,6 +58,37 @@ class GameEngine {
                 this.next();
             }
         });
+    }
+
+    async loadTitleConfig() {
+        try {
+            const response = await fetch('data/title.json');
+            const titleConfig = await response.json();
+
+            // タイトルテキストを設定
+            const titleElement = document.querySelector('#start-screen h1');
+            if (titleElement && titleConfig.title) {
+                titleElement.textContent = titleConfig.title;
+            }
+
+            // タイトル背景を設定
+            if (titleConfig.background) {
+                this.elements.startScreen.style.backgroundImage = `url('${titleConfig.background}')`;
+                this.elements.startScreen.style.backgroundSize = 'cover';
+                this.elements.startScreen.style.backgroundPosition = 'center';
+                // グラデーションを半透明にして背景画像が見えるように
+                this.elements.startScreen.style.background = `
+                    linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%),
+                    url('${titleConfig.background}')
+                `;
+                this.elements.startScreen.style.backgroundSize = 'cover';
+                this.elements.startScreen.style.backgroundPosition = 'center';
+            }
+
+            console.log('タイトル設定読み込み完了:', titleConfig);
+        } catch (error) {
+            console.warn('タイトル設定の読み込みに失敗しました（デフォルト設定を使用）:', error);
+        }
     }
 
     async loadData() {
