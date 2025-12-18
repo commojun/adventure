@@ -42,7 +42,7 @@ body {
 
 .character {
     position: absolute;
-    bottom: 0;
+    bottom: 135px;
     width: 400px;
     height: 600px;
     background-size: contain;
@@ -59,7 +59,7 @@ body {
 
 #character-center {
     left: 50%;
-    transform: translateX(-50%) translateY(100vh);
+    transform: translateX(-50%) translateY(calc(100vh - 135px));
 }
 
 #character-right {

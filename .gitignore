@@ -1,6 +1,7 @@
 # Google Cloud認証情報
 tools/credentials.json
 tools/.env
+tools/.envrc
 
 # 画像ファイル（サイズが大きいため）
 # 必要に応じてコメントアウト

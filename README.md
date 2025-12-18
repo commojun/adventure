@@ -31,7 +31,7 @@ adventure/
 └── tools/
     ├── import.go          # インポートスクリプト
     ├── go.mod
-    └── .env.example
+    └── .envrc.example     # direnv設定サンプル
 ```
 
 ## クイックスタート
@@ -68,30 +68,31 @@ npx http-server
 
 #### シート2: `characters` (キャラクターマスタ)
 
-| id | name | image_path | default_position |
-|----|------|------------|------------------|
-| char001 | 太郎 | assets/images/characters/taro.png | center |
-| char002 | 花子 | assets/images/characters/hanako.png | left |
-| char003 | 次郎 | assets/images/characters/jiro.png | right |
+| id | name | image_path |
+|----|------|------------|
+| char001 | 太郎 | assets/images/characters/taro.png |
+| char002 | 花子 | assets/images/characters/hanako.png |
+| char003 | 次郎 | assets/images/characters/jiro.png |
 
 **カラム説明:**
 - `id`: キャラクターの一意なID
 - `name`: キャラクター名（画面に表示）
 - `image_path`: 立ち絵画像のパス
-- `default_position`: デフォルト位置（left/center/right）
 
 #### シート3: `scenarios` (シナリオ)
 
-| scene_id | order | type | character_id | text | position | effect | background | next_scene |
-|----------|-------|------|--------------|------|----------|--------|------------|------------|
-| scene001 | 1 | dialogue | char001 | こんにちは！ | center | slide_in | assets/images/backgrounds/classroom.jpg | scene002 |
-| scene002 | 2 | dialogue | char002 | 元気？ | left | shake | - | scene003 |
-| scene003 | 3 | hide_character | - | | center | slide_out | - | scene004 |
-| scene004 | 4 | choice | - | | - | - | - | - |
+| scene_id | type | character_id | text | position | effect | background | next_scene |
+|----------|------|--------------|------|----------|--------|------------|------------|
+|  | dialogue | char001 | こんにちは！ | center | slide_in | assets/images/backgrounds/classroom.jpg |  |
+|  | dialogue | char002 | 元気？ | left | shake | - |  |
+|  | hide_character | - | | center | slide_out | - |  |
+| question1 | choice | - | | - | - | - |  |
 
 **カラム説明:**
-- `scene_id`: シーンの一意なID
-- `order`: 表示順序
+- `scene_id`: シーンの一意なID（**通常は空欄でOK**）
+  - 選択肢を表示するシーン（`type: choice`）には必須
+  - 選択肢の分岐先になるシーンにも設定が必要
+  - 順次進行するシーンでは空欄のまま
 - `type`: シーンタイプ
   - `dialogue`：台詞表示
   - `choice`：選択肢表示
@@ -102,7 +103,9 @@ npx http-server
   - `hide_character`の場合、非表示にするキャラクターの位置を指定
 - `effect`: 演出効果（詳細は後述）
 - `background`: 背景画像のパス（変更しない場合は`-`）
-- `next_scene`: 次のシーンID
+- `next_scene`: 次のシーンID（**通常は空欄でOK**）
+  - 空欄の場合、次の行のシーンへ自動的に進む
+  - 特定のシーンへジャンプしたい場合のみ指定
 
 **シーンタイプ別の使い方:**
 
@@ -132,13 +135,30 @@ npx http-server
 
 | scene_id | choice_text | next_scene |
 |----------|-------------|------------|
-| scene003 | 助ける | scene004 |
-| scene003 | 見守る | scene005 |
+| question1 | 助ける | help |
+| question1 | 見守る | watch |
 
 **カラム説明:**
-- `scene_id`: 選択肢を表示するシーンID（scenariosシートのtypeが`choice`のもの）
+- `scene_id`: 選択肢を表示するシーンID（scenariosシートのtypeが`choice`のシーンの`scene_id`）
 - `choice_text`: 選択肢のテキスト
-- `next_scene`: 選択後に進むシーンID
+- `next_scene`: 選択後に進むシーンID（scenariosシートで該当する`scene_id`を持つシーンへジャンプ）
+
+**使用例:**
+
+scenarios シート:
+| scene_id | type | character_id | text | position | effect | background | next_scene |
+|----------|------|--------------|------|----------|--------|------------|------------|
+|  | dialogue | char001 | どうする？ | center | - | - |  |
+| question1 | choice | - | | - | - | - |  |
+| help | dialogue | char001 | 助けるよ！ | center | - | - | end |
+| watch | dialogue | char001 | 見守ろう | center | - | - | end |
+| end | dialogue | - | おわり | - | - | - |  |
+
+choices シート:
+| scene_id | choice_text | next_scene |
+|----------|-------------|------------|
+| question1 | 助ける | help |
+| question1 | 見守る | watch |
 
 ### 3. Google Sheets API の設定
 
@@ -150,21 +170,42 @@ npx http-server
 
 ### 4. インポートスクリプトの実行
 
+#### direnvを使う場合（推奨）
+
 ```bash
 cd tools
 
 # 環境変数を設定
-cp .env.example .env
-# .envファイルを編集してSPREADSHEET_IDを設定
+cp .envrc.example .envrc
+# .envrcファイルを編集してSPREADSHEET_IDを設定
+
+# direnvを許可
+direnv allow
+
+# 依存関係のインストール
+go mod download
+
+# インポート実行（環境変数は自動的に読み込まれる）
+go run import.go
+```
+
+#### direnvを使わない場合
+
+```bash
+cd tools
+
+# 環境変数を設定
+cp .envrc.example .envrc
+# .envrcファイルを編集してSPREADSHEET_IDを設定
 
 # 依存関係のインストール
 go mod download
 
 # インポート実行
-export $(cat .env | xargs) && go run import.go
+export $(grep -v '^#' .envrc | xargs) && go run import.go
 ```
 
-成功すると `data/characters.json` と `data/scenario.json` が生成されます。
+成功すると `data/characters.json`、`data/scenario.json`、`data/title.json` が生成されます。
 
 ## 画像の準備
 

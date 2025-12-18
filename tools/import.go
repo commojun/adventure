@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 
 	"google.golang.org/api/option"
 	"google.golang.org/api/sheets/v4"
@@ -14,16 +13,14 @@ import (
 
 // キャラクター構造体
 type Character struct {
-	ID              string `json:"id"`
-	Name            string `json:"name"`
-	ImagePath       string `json:"image_path"`
-	DefaultPosition string `json:"default_position"`
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	ImagePath string `json:"image_path"`
 }
 
 // シナリオ構造体
 type Scenario struct {
 	SceneID     string   `json:"scene_id"`
-	Order       int      `json:"order"`
 	Type        string   `json:"type"`
 	CharacterID string   `json:"character_id"`
 	Text        string   `json:"text"`
@@ -118,7 +115,7 @@ func main() {
 
 // キャラクターシートを読み込む
 func readCharacters(srv *sheets.Service, spreadsheetID string) (map[string]Character, error) {
-	readRange := "characters!A2:D" // ヘッダー行を除く
+	readRange := "characters!A2:C" // ヘッダー行を除く
 	resp, err := srv.Spreadsheets.Values.Get(spreadsheetID, readRange).Do()
 	if err != nil {
 		return nil, fmt.Errorf("キャラクターシートの読み込みエラー: %v", err)
@@ -126,16 +123,15 @@ func readCharacters(srv *sheets.Service, spreadsheetID string) (map[string]Chara
 
 	characters := make(map[string]Character)
 	for _, row := range resp.Values {
-		if len(row) < 4 {
+		if len(row) < 3 {
 			continue
 		}
 
 		id := toString(row[0])
 		char := Character{
-			ID:              id,
-			Name:            toString(row[1]),
-			ImagePath:       toString(row[2]),
-			DefaultPosition: toString(row[3]),
+			ID:        id,
+			Name:      toString(row[1]),
+			ImagePath: toString(row[2]),
 		}
 		characters[id] = char
 	}
@@ -145,7 +141,7 @@ func readCharacters(srv *sheets.Service, spreadsheetID string) (map[string]Chara
 
 // シナリオシートを読み込む
 func readScenarios(srv *sheets.Service, spreadsheetID string) ([]Scenario, error) {
-	readRange := "scenarios!A2:I" // ヘッダー行を除く
+	readRange := "scenarios!A2:H" // ヘッダー行を除く（orderカラムを削除）
 	resp, err := srv.Spreadsheets.Values.Get(spreadsheetID, readRange).Do()
 	if err != nil {
 		return nil, fmt.Errorf("シナリオシートの読み込みエラー: %v", err)
@@ -153,26 +149,47 @@ func readScenarios(srv *sheets.Service, spreadsheetID string) ([]Scenario, error
 
 	var scenarios []Scenario
 	for _, row := range resp.Values {
-		if len(row) < 9 {
+		// typeカラムが空欄の場合はスキップ
+		if toString(row[1]) == "" {
 			continue
 		}
 
-		order, _ := strconv.Atoi(toString(row[1]))
+		filledRow := fillHyphenIfEmpty(row, 8)
+
 		scenario := Scenario{
-			SceneID:     toString(row[0]),
-			Order:       order,
-			Type:        toString(row[2]),
-			CharacterID: toString(row[3]),
-			Text:        toString(row[4]),
-			Position:    toString(row[5]),
-			Effect:      toString(row[6]),
-			Background:  toString(row[7]),
-			NextScene:   toString(row[8]),
+			SceneID:     filledRow[0],
+			Type:        filledRow[1],
+			CharacterID: filledRow[2],
+			Text:        filledRow[3],
+			Position:    filledRow[4],
+			Effect:      filledRow[5],
+			Background:  filledRow[6],
+			NextScene:   filledRow[7],
 		}
 		scenarios = append(scenarios, scenario)
 	}
 
 	return scenarios, nil
+}
+
+// 空欄だった場合に"-"を補完する関数
+func fillHyphenIfEmpty(vals []any, size int) []string {
+	fmt.Println(vals)
+	filled := make([]string, size)
+
+	for i := 0; i < len(filled); i++ {
+		if i >= len(vals) {
+			filled[i] = "-"
+			continue
+		}
+		v := vals[i]
+		if v == "" {
+			filled[i] = "-"
+		} else {
+			filled[i] = toString(v)
+		}
+	}
+	return filled
 }
 
 // 選択肢シートを読み込む
@@ -245,7 +262,7 @@ func saveScenariosJSON(scenarios []Scenario) error {
 }
 
 // interface{}をstringに変換
-func toString(val interface{}) string {
+func toString(val any) string {
 	if val == nil {
 		return ""
 	}
