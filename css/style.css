@@ -220,14 +220,34 @@ body {
 }
 
 /* アニメーションクラス */
-@keyframes shake {
+@keyframes shake-left {
     0%, 100% { transform: translateX(0); }
     10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
     20%, 40%, 60%, 80% { transform: translateX(10px); }
 }
 
-.shake {
-    animation: shake 0.5s;
+@keyframes shake-center {
+    0%, 100% { transform: translateX(-50%); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(calc(-50% - 10px)); }
+    20%, 40%, 60%, 80% { transform: translateX(calc(-50% + 10px)); }
+}
+
+@keyframes shake-right {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+
+#character-left.shake {
+    animation: shake-left 0.5s;
+}
+
+#character-center.shake {
+    animation: shake-center 0.5s;
+}
+
+#character-right.shake {
+    animation: shake-right 0.5s;
 }
 
 @keyframes fadeIn {
