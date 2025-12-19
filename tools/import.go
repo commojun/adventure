@@ -174,7 +174,6 @@ func readScenarios(srv *sheets.Service, spreadsheetID string) ([]Scenario, error
 
 // 空欄だった場合に"-"を補完する関数
 func fillHyphenIfEmpty(vals []any, size int) []string {
-	fmt.Println(vals)
 	filled := make([]string, size)
 
 	for i := 0; i < len(filled); i++ {
