@@ -149,6 +149,10 @@ func readScenarios(srv *sheets.Service, spreadsheetID string) ([]Scenario, error
 
 	var scenarios []Scenario
 	for _, row := range resp.Values {
+		// 完全に空欄/scene_idしかない行はスキップ
+		if len(row) <= 1 {
+			continue
+		}
 		// typeカラムが空欄の場合はスキップ
 		if toString(row[1]) == "" {
 			continue
