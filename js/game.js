@@ -25,7 +25,8 @@ class GameEngine {
             continueIndicator: document.getElementById('continue-indicator'),
             choiceContainer: document.getElementById('choice-container'),
             startScreen: document.getElementById('start-screen'),
-            startButton: document.getElementById('start-button')
+            startButton: document.getElementById('start-button'),
+            progressIndicator: document.getElementById('progress-indicator')
         };
 
         this.characterManager = new CharacterManager(this.elements);
@@ -56,6 +57,13 @@ class GameEngine {
             // タイピング完了後は次のシーンへ
             else if (this.isWaitingForInput) {
                 this.next();
+            }
+        });
+
+        // デバッグ機能: Rキーでシナリオ再読み込み
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'r' || e.key === 'R') {
+                this.reloadData();
             }
         });
     }
@@ -114,8 +122,27 @@ class GameEngine {
         // テキストボックスを表示
         this.elements.textBox.classList.add('visible');
 
-        // 最初のシーンから開始
-        this.currentSceneIndex = 0;
+        // 進行度表示を表示
+        this.elements.progressIndicator.classList.add('visible');
+
+        // デバッグ機能: クエリパラメータでシーンIDを指定
+        const urlParams = new URLSearchParams(window.location.search);
+        const sceneId = urlParams.get('id');
+
+        if (sceneId !== null) {
+            const sceneIndex = parseInt(sceneId, 10);
+            if (!isNaN(sceneIndex) && sceneIndex >= 0 && sceneIndex < this.scenarios.length) {
+                this.currentSceneIndex = sceneIndex;
+                console.log(`デバッグモード: シーン${sceneIndex}から開始`);
+            } else {
+                console.warn(`無効なシーンID: ${sceneId}`);
+                this.currentSceneIndex = 0;
+            }
+        } else {
+            // 最初のシーンから開始
+            this.currentSceneIndex = 0;
+        }
+
         this.playScene();
     }
 
@@ -129,6 +156,9 @@ class GameEngine {
         this.currentScene = scene;
 
         console.log('シーン再生:', scene);
+
+        // 進行度更新
+        this.updateProgress();
 
         // 背景変更
         if (scene.background) {
@@ -167,6 +197,11 @@ class GameEngine {
                 this.playScene();
             }, 300); // アニメーション時間を考慮
         }
+    }
+
+    updateProgress() {
+        const progress = Math.floor((this.currentSceneIndex / this.scenarios.length) * 100);
+        this.elements.progressIndicator.textContent = `シナリオ進行度: ${progress}%`;
     }
 
     displayDialogue(text) {
@@ -265,6 +300,24 @@ class GameEngine {
         this.displayDialogue('おわり');
         this.isWaitingForInput = false;
     }
+
+    async reloadData() {
+        console.log('シナリオデータを再読み込み中...');
+
+        // 現在のシーンインデックスを保存
+        const savedSceneIndex = this.currentSceneIndex;
+
+        // データを再読み込み
+        await this.loadData();
+
+        // 保存したシーンインデックスを復元
+        this.currentSceneIndex = savedSceneIndex;
+
+        // シーンを再開
+        this.playScene();
+
+        console.log(`シーン${savedSceneIndex}から再開しました`);
+    }
 }
 
 // キャラクター管理クラス
@@ -287,31 +340,39 @@ class CharacterManager {
         // 画像を設定
         element.style.backgroundImage = `url('${character.image_path}')`;
 
-        // 前回のインラインスタイルをクリア（再登場対応）
-        element.style.opacity = '';
-
         // エフェクトを適用
-        if (effect === 'slide_in') {
+        if (effect === 'slide') {
+            element.classList.add('slide');
             element.classList.remove('visible');
             setTimeout(() => {
+                element.classList.remove('slide');
                 element.classList.add('visible');
             }, 50);
         } else if (effect === 'fade') {
-            element.style.opacity = '0';
-            element.classList.add('visible');
+            element.classList.remove('slide', 'visible');
             setTimeout(() => {
-                element.style.opacity = '1';
+                element.classList.add('visible');
+            }, 50);
+        } else if (effect === 'shake') {
+            element.classList.remove('slide');
+            element.classList.add('visible');
+            // 既にshakeクラスがある場合は一旦削除（連続shake対応）
+            element.classList.remove('shake');
+            // 次のフレームでshakeを追加（アニメーション再生のため）
+            setTimeout(() => {
+                element.classList.add('shake');
+                setTimeout(() => {
+                    element.classList.remove('shake');
+                }, 500);
             }, 50);
         } else {
+            // エフェクトなし: transitionを無効化して即座に表示
+            element.classList.remove('slide');
+            element.style.transition = 'none';
             element.classList.add('visible');
-        }
-
-        // 振動エフェクト
-        if (effect === 'shake') {
-            element.classList.add('shake');
             setTimeout(() => {
-                element.classList.remove('shake');
-            }, 500);
+                element.style.transition = '';
+            }, 50);
         }
 
         this.currentCharacters[positionKey] = character;
@@ -325,17 +386,18 @@ class CharacterManager {
 
         if (effect === 'fade') {
             // フェード: その場で透明に（位置は変わらない）
-            element.style.opacity = '0';
-            // アニメーション終了後にvisibleクラスを削除
-            setTimeout(() => {
-                element.classList.remove('visible');
-            }, 300);
-        } else if (effect === 'slide_out') {
+            element.classList.remove('visible');
+        } else if (effect === 'slide') {
             // スライドアウト: 横にスライドしながら消える
+            element.classList.add('slide');
             element.classList.remove('visible');
         } else {
-            // デフォルト: 単純に非表示
+            // デフォルト: transitionを無効化して即座に非表示
+            element.style.transition = 'none';
             element.classList.remove('visible');
+            setTimeout(() => {
+                element.style.transition = '';
+            }, 50);
         }
 
         this.currentCharacters[positionKey] = null;

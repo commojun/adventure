@@ -30,6 +30,23 @@ body {
     transition: opacity 0.5s ease;
 }
 
+/* 進行度表示 */
+#progress-indicator {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 16px;
+    color: #999999;
+    font-family: 'Courier New', monospace;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#progress-indicator.visible {
+    opacity: 1;
+}
+
 /* キャラクター表示エリア */
 #character-container {
     position: absolute;
@@ -43,8 +60,8 @@ body {
 .character {
     position: absolute;
     bottom: 135px;
-    width: 400px;
-    height: 600px;
+    width: 27vw;
+    height: 40.5vw;
     background-size: contain;
     background-position: bottom center;
     background-repeat: no-repeat;
@@ -53,34 +70,34 @@ body {
 }
 
 #character-left {
-    left: 10%;
-    transform: translateX(-100px);
+    left: 3vw;
+    transform: translateX(0);
 }
 
 #character-center {
     left: 50%;
-    transform: translateX(-50%) translateY(calc(100vh - 135px));
+    transform: translateX(-50%) translateY(0);
 }
 
 #character-right {
-    right: 10%;
-    transform: translateX(100px);
+    right: 3vw;
+    transform: translateX(0);
+}
+
+.character.slide#character-left {
+    transform: translateX(-30vw);
+}
+
+.character.slide#character-center {
+    transform: translateX(-50%) translateY(calc(100vh - 135px));
+}
+
+.character.slide#character-right {
+    transform: translateX(30vw);
 }
 
 .character.visible {
     opacity: 1;
-}
-
-.character.visible#character-left {
-    transform: translateX(0);
-}
-
-.character.visible#character-center {
-    transform: translateX(-50%) translateY(0);
-}
-
-.character.visible#character-right {
-    transform: translateX(0);
 }
 
 /* テキストボックス */
@@ -90,7 +107,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
-    max-width: 900px;
+    max-width: 1200px;
     background: rgba(0, 0, 0, 0.8);
     border: 3px solid #ffffff;
     border-radius: 10px;
@@ -252,55 +269,4 @@ body {
 
 #character-right.shake {
     animation: shake-right 0.5s;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.fade-in {
-    animation: fadeIn 0.5s ease;
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-.fade-out {
-    animation: fadeOut 0.5s ease;
-}
-
-@keyframes slideInLeft {
-    from {
-        transform: translateX(-100px);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideInRight {
-    from {
-        transform: translateX(100px);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideInCenter {
-    from {
-        transform: translateX(-50%) translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(-50%) translateY(0);
-        opacity: 1;
-    }
 }
