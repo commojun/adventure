@@ -442,20 +442,16 @@ class EffectManager {
         this.currentBackground = null;
     }
 
-    changeBackground(backgroundPath, effect = 'fade') {
+    changeBackground(backgroundPath) {
         if (backgroundPath === '-' || !backgroundPath) return;
 
         const bg = this.elements.background;
 
-        if (effect === 'fade') {
-            bg.style.opacity = '0';
-            setTimeout(() => {
-                bg.style.backgroundImage = `url('${backgroundPath}')`;
-                bg.style.opacity = '1';
-            }, 500);
-        } else {
+        bg.style.opacity = '0';
+        setTimeout(() => {
             bg.style.backgroundImage = `url('${backgroundPath}')`;
-        }
+            bg.style.opacity = '1';
+        }, 100);
 
         this.currentBackground = backgroundPath;
     }
