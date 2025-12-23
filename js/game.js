@@ -50,20 +50,33 @@ class GameEngine {
                 return;
             }
 
-            // タイピング中の場合はスキップ
-            if (this.isTyping) {
-                this.skipTypewriter();
-            }
-            // タイピング完了後は次のシーンへ
-            else if (this.isWaitingForInput) {
-                this.next();
-            }
+            this.handleNext();
         });
 
-        // デバッグ機能: Rキーでシナリオ再読み込み
+        // キーボードショートカット
         document.addEventListener('keydown', (e) => {
+            // Rキー: シナリオ再読み込み（デバッグ機能）
             if (e.key === 'r' || e.key === 'R') {
                 this.reloadData();
+                return;
+            }
+
+            // スペースバー: 次へ進む / タイピングスキップ
+            if (e.key === ' ' || e.code === 'Space') {
+                // ボタンがフォーカスされている場合は無視
+                if (e.target.tagName === 'BUTTON') {
+                    return;
+                }
+
+                // スペースバーのデフォルト動作（ページスクロール）を無効化
+                e.preventDefault();
+
+                // キーリピート（長押し）は無視
+                if (e.repeat) {
+                    return;
+                }
+
+                this.handleNext();
             }
         });
     }
@@ -294,11 +307,25 @@ class GameEngine {
         this.playScene();
     }
 
+    handleNext() {
+        // タイピング中の場合はスキップ
+        if (this.isTyping) {
+            this.skipTypewriter();
+        }
+        // タイピング完了後は次のシーンへ
+        else if (this.isWaitingForInput) {
+            this.next();
+        }
+    }
+
     endGame() {
         this.elements.namePlate.textContent = '';
         this.elements.namePlate.style.display = 'none';
         this.displayDialogue('おわり');
         this.isWaitingForInput = false;
+
+        // 進行度を100%に設定
+        this.elements.progressIndicator.textContent = 'シナリオ進行度: 100%';
     }
 
     async reloadData() {
