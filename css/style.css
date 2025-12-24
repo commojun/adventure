@@ -33,9 +33,9 @@ body {
 /* 進行度表示 */
 #progress-indicator {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 16px;
+    top: 1vw;
+    right: 1vw;
+    font-size: 0.85vw;
     color: #999999;
     font-family: 'Courier New', monospace;
     z-index: 100;
@@ -59,7 +59,7 @@ body {
 
 .character {
     position: absolute;
-    bottom: 135px;
+    bottom: 11.4vw;
     width: 27vw;
     height: 40.5vw;
     background-size: contain;
@@ -89,7 +89,7 @@ body {
 }
 
 .character.slide#character-center {
-    transform: translateX(-50%) translateY(calc(100vh - 135px));
+    transform: translateX(-50%) translateY(100vh);
 }
 
 .character.slide#character-right {
@@ -103,17 +103,16 @@ body {
 /* テキストボックス */
 #text-box {
     position: absolute;
-    bottom: 30px;
+    bottom: 1.5vw;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
-    max-width: 1200px;
+    width: 94vw;
     background: rgba(0, 0, 0, 0.8);
-    border: 3px solid #ffffff;
-    border-radius: 10px;
-    padding: 20px 30px;
+    border: 0.25vw solid #ffffff;
+    border-radius: 0.8vw;
+    padding: 1.6vw 2.4vw;
     color: #ffffff;
-    font-size: 20px;
+    font-size: 1.7vw;
     line-height: 1.8;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -125,27 +124,27 @@ body {
 
 #name-plate {
     position: absolute;
-    top: -30px;
-    left: 30px;
+    top: -2.6vw;
+    left: 2.6vw;
     background: rgba(0, 0, 0, 0.9);
-    border: 2px solid #ffffff;
-    border-radius: 5px;
-    padding: 5px 20px;
-    font-size: 18px;
+    border: 0.25vw solid #ffffff;
+    border-radius: 0.8vw;
+    padding: 0.4vw 1.6vw;
+    font-size: 1.55vw;
     font-weight: bold;
     color: #ffffff;
 }
 
 #dialogue-text {
-    min-height: 60px;
+    min-height: 6.2vw;
     white-space: pre-line;
 }
 
 #continue-indicator {
     position: absolute;
-    bottom: 10px;
-    right: 20px;
-    font-size: 24px;
+    bottom: 0.8vw;
+    right: 1.6vw;
+    font-size: 2vw;
     animation: blink 1s infinite;
 }
 
@@ -162,20 +161,20 @@ body {
     transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 1vw;
     z-index: 100;
 }
 
 .choice-button {
     background: rgba(0, 0, 0, 0.85);
-    border: 3px solid #ffffff;
-    border-radius: 10px;
-    padding: 20px 40px;
+    border: 0.25vw solid #ffffff;
+    border-radius: 0.8vw;
+    padding: 1vw 2vw;
     color: #ffffff;
-    font-size: 22px;
+    font-size: 1.7vw;
     cursor: pointer;
     transition: all 0.3s ease;
-    min-width: 400px;
+    min-width: 30vw;
     text-align: center;
 }
 
@@ -207,32 +206,32 @@ body {
 }
 
 #start-screen h1 {
-    font-size: 48px;
+    font-size: 3.5vw;
     color: #ffffff;
-    margin-bottom: 50px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2.6vw;
+    text-shadow: 0.1vw 0.1vw 0.2vw rgba(0, 0, 0, 0.5);
     background: rgba(128, 128, 128, 0.6);
-    padding: 20px 40px;
-    border-radius: 10px;
+    padding: 1vw 2vw;
+    border-radius: 0.8vw;
 }
 
 #start-button {
     background: rgba(255, 255, 255, 0.9);
     border: none;
-    border-radius: 50px;
-    padding: 20px 60px;
-    font-size: 28px;
+    border-radius: 2.6vw;
+    padding: 1vw 3vw;
+    font-size: 1.5vw;
     font-weight: bold;
     color: #666666;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.2vw 0.8vw rgba(0, 0, 0, 0.3);
 }
 
 #start-button:hover {
     background: #ffffff;
     transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0.3vw 1vw rgba(0, 0, 0, 0.4);
 }
 
 /* ユーティリティクラス */
@@ -243,20 +242,20 @@ body {
 /* アニメーションクラス */
 @keyframes shake-left {
     0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
-    20%, 40%, 60%, 80% { transform: translateX(10px); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-0.5vw); }
+    20%, 40%, 60%, 80% { transform: translateX(0.5vw); }
 }
 
 @keyframes shake-center {
     0%, 100% { transform: translateX(-50%) translateY(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(calc(-50% - 10px)) translateY(0); }
-    20%, 40%, 60%, 80% { transform: translateX(calc(-50% + 10px)) translateY(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(calc(-50% - 0.5vw)) translateY(0); }
+    20%, 40%, 60%, 80% { transform: translateX(calc(-50% + 0.5vw)) translateY(0); }
 }
 
 @keyframes shake-right {
     0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
-    20%, 40%, 60%, 80% { transform: translateX(10px); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-0.5vw); }
+    20%, 40%, 60%, 80% { transform: translateX(0.5vw); }
 }
 
 #character-left.shake {
