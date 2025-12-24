@@ -6,9 +6,11 @@ Googleスプレッドシートで管理可能なビジュアルノベル風ア�
 
 - **データドリブン設計**: Googleスプレッドシートで台本を管理
 - **ビジュアルノベル風UI**: キャラクター立ち絵とテキストボックス
-- **文字送り演出**: テキストが1文字ずつ表示される（クリックでスキップ可能）
-- **豊富な演出**: スライドイン/アウト、振動、背景転換など
+- **文字送り演出**: テキストが1文字ずつ表示される（クリック・スペースバーでスキップ可能）
+- **豊富な演出**: スライド、振動、フェード、背景転換など
 - **選択肢システム**: ストーリー分岐に対応
+- **進行度表示**: シナリオの進行度をリアルタイムで表示
+- **レスポンシブデザイン**: 4K・フルHDなど様々な解像度に対応（VW単位）
 - **簡単インポート**: Golangスクリプトで自動変換
 
 ## プロジェクト構成
@@ -83,9 +85,9 @@ npx http-server
 
 | scene_id | type | character_id | text | position | effect | background | next_scene |
 |----------|------|--------------|------|----------|--------|------------|------------|
-|  | dialogue | char001 | こんにちは！ | center | slide_in | assets/images/backgrounds/classroom.jpg |  |
+|  | dialogue | char001 | こんにちは！ | center | slide | assets/images/backgrounds/classroom.jpg |  |
 |  | dialogue | char002 | 元気？ | left | shake | - |  |
-|  | hide_character | - | | center | slide_out | - |  |
+|  | hide_character | - | | center | slide | - |  |
 | question1 | choice | - | | - | - | - |  |
 
 **カラム説明:**
@@ -121,15 +123,14 @@ npx http-server
 **hide_character（キャラクター非表示）:**
 - キャラクターを画面から退場させる
 - `position`に非表示にするキャラクターの位置（left/center/right）を指定
-- `effect`に退場エフェクト（slide_out/fade）を指定
+- `effect`に退場エフェクト（slide/fade）を指定
 - クリック不要で自動的に次のシーンへ進む
 
 **演出効果 (effect):**
-- `slide_in`: スライドイン（登場）
-- `slide_out`: スライドアウト（退場）
+- `slide`: スライド（登場時はスライドイン、退場時はスライドアウト）
 - `shake`: 振動
 - `fade`: フェード（登場・退場両方で使用可）
-- `-`: 演出なし
+- `-`: 演出なし（即座に表示）
 
 #### シート4: `choices` (選択肢)
 
@@ -248,9 +249,9 @@ export $(grep -v '^#' .envrc | xargs) && go run import.go
 
 ### 基本的な流れ
 1. ナレーション（`character_id: -`）でシーンを説明
-2. キャラクターを登場させる（`type: dialogue`, `effect: slide_in`）
+2. キャラクターを登場させる（`type: dialogue`, `effect: slide`）
 3. 会話を進める
-4. キャラクターを退場させる（`type: hide_character`, `effect: slide_out`）
+4. キャラクターを退場させる（`type: hide_character`, `effect: slide`）
 5. 必要に応じて選択肢を配置（`type: choice`）
 6. 選択肢後のシーンを `scene_id` で管理
 
@@ -259,14 +260,14 @@ export $(grep -v '^#' .envrc | xargs) && go run import.go
 **キャラクター登場:**
 ```
 type: dialogue
-effect: slide_in
+effect: slide (または fade)
 ```
 
 **キャラクター退場:**
 ```
 type: hide_character
 position: center  (退場させる位置)
-effect: slide_out (または fade)
+effect: slide (または fade)
 ```
 
 **驚きや衝撃:**
@@ -301,9 +302,12 @@ this.textSpeed = 50; // 1文字あたりの表示速度（ミリ秒）
 - `50` - 標準（デフォルト）
 - `80` - ゆっくり（読みやすさ重視）
 
-**操作方法:**
-- **クリック**: タイピング中は全文を即座に表示（スキップ）、完了後は次のシーンへ進む
+## 操作方法
+
+- **クリック** または **スペースバー**: タイピング中は全文を即座に表示（スキップ）、完了後は次のシーンへ進む
 - タイピング中に「▼」は非表示、完了後に表示されます
+- スペースバーの長押しは無視されます（連続送りを防止）
+- **Rキー**: シナリオデータを再読み込み（デバッグ機能）
 
 ## 拡張性
 
