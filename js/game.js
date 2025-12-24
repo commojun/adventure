@@ -217,8 +217,9 @@ class GameEngine {
         this.elements.progressIndicator.textContent = `シナリオ進行度: ${progress}%`;
     }
 
-    displayDialogue(text) {
+    displayDialogue(text, showContinueIndicator = true) {
         this.fullText = text;
+        this.showContinueIndicatorFlag = showContinueIndicator;
         this.elements.dialogueText.textContent = '';
         this.elements.continueIndicator.style.display = 'none';
         this.isTyping = true;
@@ -233,7 +234,9 @@ class GameEngine {
             } else {
                 // タイピング完了
                 this.isTyping = false;
-                this.elements.continueIndicator.style.display = 'block';
+                if (this.showContinueIndicatorFlag) {
+                    this.elements.continueIndicator.style.display = 'block';
+                }
             }
         };
 
@@ -250,7 +253,9 @@ class GameEngine {
         // 全文を即座に表示
         this.elements.dialogueText.textContent = this.fullText;
         this.isTyping = false;
-        this.elements.continueIndicator.style.display = 'block';
+        if (this.showContinueIndicatorFlag) {
+            this.elements.continueIndicator.style.display = 'block';
+        }
     }
 
     showChoices(scene) {
@@ -321,7 +326,7 @@ class GameEngine {
     endGame() {
         this.elements.namePlate.textContent = '';
         this.elements.namePlate.style.display = 'none';
-        this.displayDialogue('おわり');
+        this.displayDialogue('おわり', false);
         this.isWaitingForInput = false;
 
         // 進行度を100%に設定
