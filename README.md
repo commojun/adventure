@@ -100,6 +100,7 @@ npx http-server
   - `show_character`：キャラクター表示のみ（自動遷移）
   - `choice`：選択肢表示
   - `hide_character`：キャラクター非表示（自動遷移）
+  - `none`：何も表示せず自動遷移（背景変更などの演出用）
 - `character_id`: 話すキャラクターのID（ナレーションや`hide_character`の場合は`-`）
 - `text`: 表示するテキスト（`hide_character`の場合は空欄）
 - `position`: キャラクター位置（left/center/right）
@@ -133,8 +134,14 @@ npx http-server
 - `character_id`に表示するキャラクターIDを指定
 - `position`にキャラクター位置（left/center/right）を指定
 - `effect`に登場エフェクト（slide/fade/shake/-）を指定
-- 待機時間はエフェクトに応じて自動設定（slide/fade: 300ms, shake: 500ms, なし: 0ms）
+- 待機時間はエフェクトに応じて自動設定（slide/fade: 300ms, shake: 500ms, なし: 100ms）
 - 使用例: キャラクターを無言で登場させたい場合や、複数キャラクターを順次登場させる場合
+
+**none（演出のみ）:**
+- 何も表示せず、100ms後に自動的に次のシーンへ進む
+- `background`で背景変更などの演出専用
+- `character_id`、`text`は空欄にする
+- 使用例: 場面転換、背景のみ変更したい場合
 
 **演出効果 (effect):**
 - `slide`: スライド（登場時はスライドイン、退場時はスライドアウト）
