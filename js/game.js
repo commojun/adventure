@@ -115,6 +115,9 @@ class GameEngine {
             this.characters = await charactersRes.json();
             this.scenarios = await scenariosRes.json();
 
+            // CharacterManagerにデータを設定
+            this.characterManager.setCharacters(this.characters);
+
             console.log('データ読み込み完了:', {
                 characters: Object.keys(this.characters).length,
                 scenarios: this.scenarios.length
@@ -178,43 +181,82 @@ class GameEngine {
             this.effectManager.changeBackground(scene.background);
         }
 
-        // キャラクター表示
-        if (scene.character_id && scene.character_id !== '-') {
-            const character = this.characters[scene.character_id];
-            if (character) {
-                this.characterManager.showCharacter(
-                    character,
-                    scene.position || 'center',
-                    scene.effect
-                );
-                this.elements.namePlate.textContent = character.name;
-                this.elements.namePlate.style.display = 'block';
-            }
-        } else {
-            this.elements.namePlate.textContent = '';
-            this.elements.namePlate.style.display = 'none';
-        }
+        // ネームプレートをデフォルトで非表示
+        this.elements.namePlate.textContent = '';
+        this.elements.namePlate.style.display = 'none';
 
-        // 台詞表示
+        // シーンタイプ別処理
         if (scene.type === 'dialogue') {
+            // キャラクター表示
+            if (scene.character_id && scene.character_id !== '-') {
+                this.characterManager.showCharacter(scene);
+
+                // ネームプレート表示
+                const character = this.characters[scene.character_id];
+                if (character) {
+                    this.elements.namePlate.textContent = character.name;
+                    this.elements.namePlate.style.display = 'block';
+                }
+            }
+
+            // テキスト表示
             this.displayDialogue(scene.text);
             this.isWaitingForInput = true;
+
         } else if (scene.type === 'choice') {
+            // 選択肢表示
             this.showChoices(scene);
-        } else if (scene.type === 'hide_character') {
-            // キャラクター非表示
-            this.characterManager.hideCharacter(scene.position, scene.effect);
-            // 自動的に次のシーンへ進む
+
+        } else if (scene.type === 'show_character') {
+            // キャラクター表示のみ（テキストなし）
+            if (scene.character_id && scene.character_id !== '-') {
+                this.characterManager.showCharacter(scene);
+            }
+
+            // エフェクトに応じた待機時間後に自動遷移
+            const waitTime = this.getEffectWaitTime(scene.effect);
             setTimeout(() => {
                 this.currentSceneIndex++;
                 this.playScene();
-            }, 300); // アニメーション時間を考慮
+            }, waitTime);
+
+        } else if (scene.type === 'hide_character') {
+            // キャラクター非表示
+            this.characterManager.hideCharacter(scene.position, scene.effect);
+
+            // エフェクトに応じた待機時間後に自動遷移
+            const waitTime = this.getEffectWaitTime(scene.effect);
+            setTimeout(() => {
+                this.currentSceneIndex++;
+                this.playScene();
+            }, waitTime);
+
+        } else if (scene.type === 'none') {
+            // 何もしない（背景変更などを想定）
+            setTimeout(() => {
+                this.currentSceneIndex++;
+                this.playScene();
+            }, 100);
+
         }
     }
 
     updateProgress() {
         const progress = Math.floor((this.currentSceneIndex / this.scenarios.length) * 100);
         this.elements.progressIndicator.textContent = `シナリオ進行度: ${progress}%`;
+    }
+
+    getEffectWaitTime(effect) {
+        // エフェクトに応じた待機時間を返す
+        if (effect === 'slide' ) {
+            return 300; // スライドアニメーション時間
+        } else if (effect === 'fade') {
+            return 300; // フェードアニメーション時間
+        } else if (effect === 'shake') {
+            return 500; // シェイクアニメーション時間
+        } else {
+            return 100; // エフェクトなし
+        }
     }
 
     displayDialogue(text, showContinueIndicator = true) {
@@ -356,6 +398,7 @@ class GameEngine {
 class CharacterManager {
     constructor(elements) {
         this.elements = elements;
+        this.characters = null;
         this.currentCharacters = {
             left: null,
             center: null,
@@ -363,8 +406,19 @@ class CharacterManager {
         };
     }
 
-    showCharacter(character, position, effect) {
-        const positionKey = position || 'center';
+    setCharacters(characters) {
+        this.characters = characters;
+    }
+
+    showCharacter(scene) {
+        // sceneからキャラクター情報を取得
+        const character = this.characters[scene.character_id];
+        if (!character) {
+            console.warn(`キャラクターが見つかりません: ${scene.character_id}`);
+            return;
+        }
+
+        const positionKey = scene.position || 'center';
         const element = this.elements[`character${this.capitalizeFirst(positionKey)}`];
 
         if (!element) return;
@@ -373,6 +427,7 @@ class CharacterManager {
         element.style.backgroundImage = `url('${character.image_path}')`;
 
         // エフェクトを適用
+        const effect = scene.effect;
         if (effect === 'slide') {
             element.classList.add('slide');
             element.classList.remove('visible');

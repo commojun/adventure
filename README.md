@@ -97,8 +97,9 @@ npx http-server
   - 順次進行するシーンでは空欄のまま
 - `type`: シーンタイプ
   - `dialogue`：台詞表示
+  - `show_character`：キャラクター表示のみ（自動遷移）
   - `choice`：選択肢表示
-  - `hide_character`：キャラクター非表示
+  - `hide_character`：キャラクター非表示（自動遷移）
 - `character_id`: 話すキャラクターのID（ナレーションや`hide_character`の場合は`-`）
 - `text`: 表示するテキスト（`hide_character`の場合は空欄）
 - `position`: キャラクター位置（left/center/right）
@@ -125,6 +126,15 @@ npx http-server
 - `position`に非表示にするキャラクターの位置（left/center/right）を指定
 - `effect`に退場エフェクト（slide/fade）を指定
 - クリック不要で自動的に次のシーンへ進む
+
+**show_character（キャラクター表示）:**
+- キャラクターの登場演出のみを行う
+- テキスト表示なし、クリック不要で自動的に次のシーンへ進む
+- `character_id`に表示するキャラクターIDを指定
+- `position`にキャラクター位置（left/center/right）を指定
+- `effect`に登場エフェクト（slide/fade/shake/-）を指定
+- 待機時間はエフェクトに応じて自動設定（slide/fade: 300ms, shake: 500ms, なし: 0ms）
+- 使用例: キャラクターを無言で登場させたい場合や、複数キャラクターを順次登場させる場合
 
 **演出効果 (effect):**
 - `slide`: スライド（登場時はスライドイン、退場時はスライドアウト）
