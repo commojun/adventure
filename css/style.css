@@ -12,7 +12,8 @@ body {
 #game-container {
     position: relative;
     width: 100vw;
-    height: 100vh;
+    height: 100vh;   /* フォールバック（古いブラウザ用） */
+    height: 100dvh;  /* 動的ビューポート高さ（アドレスバー対応） */
     overflow: hidden;
     background-color: #000;
 }
@@ -89,7 +90,8 @@ body {
 }
 
 .character.slide#character-center {
-    transform: translateX(-50%) translateY(100vh);
+    transform: translateX(-50%) translateY(100vh);   /* フォールバック */
+    transform: translateX(-50%) translateY(100dvh);  /* 動的ビューポート */
 }
 
 .character.slide#character-right {
