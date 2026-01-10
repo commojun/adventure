@@ -322,19 +322,24 @@ class GameEngine {
         }
     }
 
+    jumpToSceneById(sceneId) {
+        // シーンIDから次のシーンのインデックスを見つける
+        const nextIndex = this.scenarios.findIndex(s => s.scene_id === sceneId);
+        if (nextIndex !== -1) {
+            this.currentSceneIndex = nextIndex;
+        } else {
+            console.warn(`シーンが見つかりません: ${sceneId}`);
+            this.currentSceneIndex++;
+        }
+    }
+
     selectChoice(nextSceneId) {
         // 選択肢を非表示
         this.elements.choiceContainer.classList.add('hidden');
         this.elements.textBox.classList.add('visible');
 
-        // 次のシーンのインデックスを見つける
-        const nextIndex = this.scenarios.findIndex(s => s.scene_id === nextSceneId);
-        if (nextIndex !== -1) {
-            this.currentSceneIndex = nextIndex;
-        } else {
-            this.currentSceneIndex++;
-        }
-
+        // 次のシーンへジャンプ
+        this.jumpToSceneById(nextSceneId);
         this.playScene();
     }
 
@@ -350,7 +355,13 @@ class GameEngine {
         }
 
         // 次のシーンへ
-        this.currentSceneIndex++;
+        if (this.currentScene.next_scene !== '-') {
+            // next_sceneが定義されている場合、そのシーンへジャンプ
+            this.jumpToSceneById(this.currentScene.next_scene);
+        } else {
+            // next_sceneが未定義の場合、配列インデックス上の次のシーン
+            this.currentSceneIndex++;
+        }
         this.playScene();
     }
 
