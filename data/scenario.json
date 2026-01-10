@@ -1,76 +1,129 @@
 [
   {
-    "scene_id": "scene001",
-    "order": 1,
+    "scene_id": "-",
+    "type": "none",
+    "character_id": "-",
+    "text": "-",
+    "position": "-",
+    "effect": "-",
+    "background": "assets/images/backgrounds/classroom.png",
+    "next_scene": "-"
+  },
+  {
+    "scene_id": "-",
+    "type": "none",
+    "character_id": "-",
+    "text": "-",
+    "position": "-",
+    "effect": "-",
+    "background": "assets/images/backgrounds/title.jpg",
+    "next_scene": "-"
+  },
+  {
+    "scene_id": "-",
     "type": "dialogue",
     "character_id": "-",
     "text": "ある晴れた日の朝、学校の教室で...",
-    "position": "center",
+    "position": "-",
     "effect": "-",
     "background": "assets/images/backgrounds/classroom.png",
-    "next_scene": "scene002"
+    "next_scene": "-"
   },
   {
-    "scene_id": "scene002",
-    "order": 2,
+    "scene_id": "-",
     "type": "dialogue",
     "character_id": "char001",
     "text": "おはよう！今日もいい天気だね！",
     "position": "right",
-    "effect": "slide_in",
+    "effect": "-",
     "background": "-",
-    "next_scene": "scene002a"
+    "next_scene": "-"
   },
   {
-    "scene_id": "scene002a",
-    "order": 2.5,
+    "scene_id": "-",
     "type": "hide_character",
     "character_id": "-",
-    "text": "",
+    "text": "-",
     "position": "right",
-    "effect": "slide_out",
+    "effect": "slide",
     "background": "-",
-    "next_scene": "scene003"
+    "next_scene": "-"
   },
   {
-    "scene_id": "scene003",
-    "order": 3,
+    "scene_id": "-",
     "type": "dialogue",
     "character_id": "char002",
     "text": "太郎くん、おはよう。今日は体育祭の準備があるんだよね。",
     "position": "left",
-    "effect": "slide_in",
+    "effect": "slide",
     "background": "-",
-    "next_scene": "scene004"
+    "next_scene": "-"
   },
   {
-    "scene_id": "scene004",
-    "order": 4,
+    "scene_id": "-",
     "type": "dialogue",
     "character_id": "char001",
     "text": "そうそう！でも、まだ準備が終わってないんだ...",
     "position": "center",
     "effect": "shake",
     "background": "-",
-    "next_scene": "scene005"
+    "next_scene": "-"
   },
   {
-    "scene_id": "scene005",
-    "order": 5,
+    "scene_id": "-",
+    "type": "hide_character",
+    "character_id": "char001",
+    "text": "-",
+    "position": "center",
+    "effect": "slide",
+    "background": "-",
+    "next_scene": "-"
+  },
+  {
+    "scene_id": "-",
+    "type": "show_character",
+    "character_id": "char001",
+    "text": "-",
+    "position": "right",
+    "effect": "slide",
+    "background": "-",
+    "next_scene": "-"
+  },
+  {
+    "scene_id": "-",
     "type": "dialogue",
     "character_id": "char002",
     "text": "困ったね...どうする？",
     "position": "-",
-    "effect": "slide_out",
+    "effect": "-",
     "background": "-",
-    "next_scene": "scene006"
+    "next_scene": "-"
+  },
+  {
+    "scene_id": "-",
+    "type": "show_character",
+    "character_id": "char003",
+    "text": "-",
+    "position": "center",
+    "effect": "slide",
+    "background": "-",
+    "next_scene": "-"
+  },
+  {
+    "scene_id": "-",
+    "type": "hide_character",
+    "character_id": "char003",
+    "text": "-",
+    "position": "center",
+    "effect": "fade",
+    "background": "-",
+    "next_scene": "-"
   },
   {
     "scene_id": "scene006",
-    "order": 6,
     "type": "choice",
     "character_id": "-",
-    "text": "",
+    "text": "-",
     "position": "-",
     "effect": "-",
     "background": "-",
@@ -88,89 +141,81 @@
   },
   {
     "scene_id": "scene007",
-    "order": 7,
     "type": "dialogue",
     "character_id": "char001",
     "text": "花子ちゃん、一緒に手伝ってくれないかな？",
-    "position": "center",
+    "position": "-",
     "effect": "-",
     "background": "-",
-    "next_scene": "scene008"
+    "next_scene": "-"
   },
   {
-    "scene_id": "scene008",
-    "order": 8,
+    "scene_id": "-",
     "type": "dialogue",
     "character_id": "char002",
     "text": "もちろん！一緒に頑張ろう！",
-    "position": "left",
+    "position": "-",
     "effect": "-",
     "background": "-",
-    "next_scene": "scene009"
+    "next_scene": "-"
   },
   {
-    "scene_id": "scene009",
-    "order": 9,
+    "scene_id": "-",
     "type": "dialogue",
     "character_id": "char001",
     "text": "ありがとう！二人なら大丈夫だね！",
-    "position": "center",
+    "position": "-",
     "effect": "-",
     "background": "-",
     "next_scene": "scene013"
   },
   {
     "scene_id": "scene010",
-    "order": 10,
     "type": "dialogue",
     "character_id": "char001",
     "text": "大丈夫、自分でやってみるよ！",
-    "position": "center",
+    "position": "-",
     "effect": "-",
     "background": "-",
-    "next_scene": "scene011"
+    "next_scene": "-"
   },
   {
-    "scene_id": "scene011",
-    "order": 11,
+    "scene_id": "-",
     "type": "dialogue",
     "character_id": "char002",
     "text": "そう...頑張ってね。",
-    "position": "left",
+    "position": "-",
     "effect": "-",
     "background": "-",
-    "next_scene": "scene012"
+    "next_scene": "-"
   },
   {
-    "scene_id": "scene012",
-    "order": 12,
+    "scene_id": "-",
     "type": "dialogue",
     "character_id": "char001",
     "text": "...やっぱり一人じゃ大変だったな。",
-    "position": "center",
+    "position": "right",
     "effect": "shake",
     "background": "-",
-    "next_scene": "scene013"
+    "next_scene": "-"
   },
   {
     "scene_id": "scene013",
-    "order": 13,
     "type": "dialogue",
     "character_id": "-",
     "text": "そして、体育祭の日がやってきた...",
-    "position": "center",
+    "position": "-",
     "effect": "-",
     "background": "assets/images/backgrounds/schoolyard.png",
-    "next_scene": "scene014"
+    "next_scene": "-"
   },
   {
-    "scene_id": "scene014",
-    "order": 14,
+    "scene_id": "-",
     "type": "dialogue",
     "character_id": "char003",
     "text": "みんな！よく頑張ったね！最高の体育祭になったよ！",
-    "position": "right",
-    "effect": "slide_in",
+    "position": "center",
+    "effect": "slide",
     "background": "-",
     "next_scene": "end"
   }
