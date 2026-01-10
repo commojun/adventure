@@ -13,6 +13,9 @@ class GameEngine {
         this.typewriterTimer = null; // タイマーID
         this.fullText = ''; // 表示予定の全文
 
+        // プリロード関連
+        this.preloadPromise = null;
+
         // DOM要素
         this.elements = {
             background: document.getElementById('background'),
@@ -38,6 +41,9 @@ class GameEngine {
     async init() {
         // タイトル設定を読み込み
         await this.loadTitleConfig();
+
+        // データと画像をバックグラウンドでプリロード開始
+        this.preloadPromise = this.loadData().then(() => this.preloadImages());
 
         // スタートボタンのイベント設定
         this.elements.startButton.addEventListener('click', () => this.startGame());
@@ -128,12 +134,58 @@ class GameEngine {
         }
     }
 
+    async preloadImages() {
+        // 1. 画像パスを収集
+        const imagePaths = new Set();
+
+        // characters.json から収集
+        Object.values(this.characters).forEach(char => {
+            if (char.image_path && char.image_path !== '-') {
+                imagePaths.add(char.image_path);
+            }
+        });
+
+        // scenario.json から収集
+        this.scenarios.forEach(scene => {
+            if (scene.background && scene.background !== '-') {
+                imagePaths.add(scene.background);
+            }
+        });
+
+        console.log(`画像プリロード開始: ${imagePaths.size}枚`, Array.from(imagePaths));
+
+        // 2. 並列でプリロード
+        const preloadPromises = Array.from(imagePaths).map(path => {
+            return new Promise((resolve) => {
+                const img = new Image();
+
+                img.onload = () => {
+                    console.log(`✓ ${path}`);
+                    resolve();
+                };
+
+                img.onerror = (error) => {
+                    console.warn(`✗ ${path}`, error);
+                    resolve(); // エラーでも resolve（ゲーム継続）
+                };
+
+                img.src = path;
+            });
+        });
+
+        // 3. 全て完了を待つ
+        await Promise.all(preloadPromises);
+        console.log('画像プリロード完了');
+    }
+
     async startGame() {
         // スタート画面を非表示
         this.elements.startScreen.classList.add('hidden');
 
-        // データ読み込み
-        await this.loadData();
+        // プリロード完了を待つ（init時に開始済み）
+        if (this.preloadPromise) {
+            await this.preloadPromise;
+        }
 
         // テキストボックスを表示
         this.elements.textBox.classList.add('visible');
