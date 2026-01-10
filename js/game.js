@@ -268,8 +268,7 @@ class GameEngine {
             // エフェクトに応じた待機時間後に自動遷移
             const waitTime = this.getEffectWaitTime(scene.effect);
             setTimeout(() => {
-                this.currentSceneIndex++;
-                this.playScene();
+                this.next();
             }, waitTime);
 
         } else if (scene.type === 'hide_character') {
@@ -279,15 +278,13 @@ class GameEngine {
             // エフェクトに応じた待機時間後に自動遷移
             const waitTime = this.getEffectWaitTime(scene.effect);
             setTimeout(() => {
-                this.currentSceneIndex++;
-                this.playScene();
+                this.next();
             }, waitTime);
 
         } else if (scene.type === 'none') {
             // 何もしない（背景変更などを想定）
             setTimeout(() => {
-                this.currentSceneIndex++;
-                this.playScene();
+                this.next();
             }, 100);
 
         }
@@ -375,6 +372,12 @@ class GameEngine {
     }
 
     jumpToSceneById(sceneId) {
+        // sceneIdがendだった場合、ゲーム終了とみなして最後のシーンに移動
+        if (sceneId === 'end') {
+            this.currentSceneIndex = this.scenarios.length;
+            return;
+        }
+
         // シーンIDから次のシーンのインデックスを見つける
         const nextIndex = this.scenarios.findIndex(s => s.scene_id === sceneId);
         if (nextIndex !== -1) {
@@ -396,16 +399,6 @@ class GameEngine {
     }
 
     next() {
-        if (!this.isWaitingForInput) return;
-
-        this.isWaitingForInput = false;
-
-        // タイマーをクリア（念のため）
-        if (this.typewriterTimer) {
-            clearTimeout(this.typewriterTimer);
-            this.typewriterTimer = null;
-        }
-
         // 次のシーンへ
         if (this.currentScene.next_scene !== '-') {
             // next_sceneが定義されている場合、そのシーンへジャンプ
@@ -424,6 +417,12 @@ class GameEngine {
         }
         // タイピング完了後は次のシーンへ
         else if (this.isWaitingForInput) {
+            this.isWaitingForInput = false;
+            // タイマーをクリア（念のため）
+            if (this.typewriterTimer) {
+                clearTimeout(this.typewriterTimer);
+                this.typewriterTimer = null;
+            }
             this.next();
         }
     }
