@@ -271,3 +271,95 @@ body {
 #character-right.shake {
     animation: shake-right 0.5s;
 }
+
+/* ========== スマホ縦画面対応 ========== */
+@media (orientation: portrait) {
+    /* テキストボックス - 画面下半分 */
+    #text-box {
+        bottom: 1vh;
+        bottom: 1dvh;
+        width: 98vw;
+        padding: 2dvh 5vw;
+    }
+
+    #dialogue-text {
+        font-size: 4.5vw;
+        min-height: 44vh;
+        min-height: 44dvh;
+    }
+
+    #name-plate {
+        top: -5.6vw;
+        font-size: 4vw;
+    }
+
+    #continue-indicator {
+        font-size: 5vw;
+        bottom: 2vw;
+        right: 4vw;
+    }
+
+    /* 背景画像 - 画面上半分 */
+    #background {
+        height: 50vh;
+        height: 50dvh;
+        background-size: cover;
+        background-position: center bottom;
+    }
+
+    /* キャラクター - 上半分に配置 */
+    .character {
+        bottom: 50vh;
+        bottom: 50dvh;
+        width: 33.3vw;
+        height: 52.5vw;
+        background-position: bottom center;
+    }
+
+    #character-left {
+      left: 0;
+    }
+
+    #character-center {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #character-right {
+        right: 0;
+    }
+
+    .character.slide#character-center {
+        transform: translateX(-50%) translateY(50vh);
+        transform: translateX(-50%) translateY(50dvh);
+    }
+
+    /* 選択肢 */
+    #choice-container {
+        top: 75%;
+    }
+
+    .choice-button {
+        font-size: 4.5vw;
+        padding: 3vw 5vw;
+        min-width: 60vw;
+    }
+
+    /* 進行度表示 */
+    #progress-indicator {
+        font-size: 3vw;
+        top: 2vw;
+        right: 2vw;
+    }
+
+    /* スタート画面 */
+    #start-screen h1 {
+        font-size: 8vw;
+        padding: 3vw 5vw;
+    }
+
+    #start-button {
+        font-size: 5vw;
+        padding: 3vw 8vw;
+    }
+}
