@@ -6,16 +6,6 @@
     "text": "-",
     "position": "-",
     "effect": "-",
-    "background": "assets/images/backgrounds/classroom.png",
-    "next_scene": "-"
-  },
-  {
-    "scene_id": "-",
-    "type": "none",
-    "character_id": "-",
-    "text": "-",
-    "position": "-",
-    "effect": "-",
     "background": "assets/images/backgrounds/title.jpg",
     "next_scene": "-"
   },
@@ -24,6 +14,16 @@
     "type": "dialogue",
     "character_id": "-",
     "text": "ある晴れた日の朝、学校の教室で...",
+    "position": "-",
+    "effect": "-",
+    "background": "-",
+    "next_scene": "-"
+  },
+  {
+    "scene_id": "-",
+    "type": "none",
+    "character_id": "-",
+    "text": "-",
     "position": "-",
     "effect": "-",
     "background": "assets/images/backgrounds/classroom.png",
