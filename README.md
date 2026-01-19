@@ -13,11 +13,37 @@ Googleスプレッドシートで管理可能なビジュアルノベル風ア�
 - **レスポンシブデザイン**: 4K・フルHDなど様々な解像度に対応（VW単位）
 - **簡単インポート**: Golangスクリプトで自動変換
 
+## 前提条件
+
+このプロジェクトを実行するには、以下のツールがインストールされている必要があります。
+
+- **golang** - インポートスクリプトの実行に使用
+- **direnv** - 環境変数の管理（推奨）
+- **go-task** - タスクランナー（コマンド実行の簡素化）
+- **python3** - ローカルサーバーの起動に使用
+
+### インストール例（macOS）
+
+```bash
+# Homebrewを使用する場合
+brew install go direnv go-task python3
+
+# direnvの設定（.bashrcや.zshrcに追加）
+eval "$(direnv hook bash)"  # bashの場合
+eval "$(direnv hook zsh)"   # zshの場合
+```
+
 ## プロジェクト構成
 
 ```
 adventure/
 ├── index.html              # メインゲーム画面
+├── Taskfile.yml            # タスク定義（go-task）
+├── go.mod                  # Go依存関係管理
+├── go.sum
+├── .envrc                  # 環境変数設定（direnv）
+├── .envrc.example          # 環境変数設定サンプル
+├── credentials.json        # Google API認証情報
 ├── css/
 │   └── style.css          # スタイルシート
 ├── js/
@@ -31,26 +57,21 @@ adventure/
 │       ├── characters/    # キャラクター画像
 │       └── backgrounds/   # 背景画像
 └── tools/
-    ├── import.go          # インポートスクリプト
-    ├── go.mod
-    └── .envrc.example     # direnv設定サンプル
+    └── import/
+        └── import.go      # インポートスクリプト
 ```
 
 ## クイックスタート
 
 ### 1. ゲームの起動
 
-ローカルサーバーを起動してゲームを実行：
-
 ```bash
-# Pythonを使用する場合
-python3 -m http.server 8000
-
-# Node.jsを使用する場合
-npx http-server
+task serve
 ```
 
 ブラウザで `http://localhost:8000` を開く
+
+**Note:** `task serve` は内部的に `python3 -m http.server 8000` を実行します。
 
 ### 2. Googleスプレッドシートの準備
 
@@ -188,42 +209,56 @@ choices シート:
 
 ### 4. インポートスクリプトの実行
 
-#### direnvを使う場合（推奨）
+#### 初回セットアップ
 
 ```bash
-cd tools
-
-# 環境変数を設定
+# 環境変数ファイルを作成
 cp .envrc.example .envrc
-# .envrcファイルを編集してSPREADSHEET_IDを設定
+
+# .envrcを編集してSPREADSHEET_IDを設定
+# 例: export SPREADSHEET_ID=1a2b3c4d5e6f...
 
 # direnvを許可
 direnv allow
 
-# 依存関係のインストール
+# Go依存関係のインストール
 go mod download
-
-# インポート実行（環境変数は自動的に読み込まれる）
-go run import.go
 ```
 
-#### direnvを使わない場合
+#### インポート実行
 
 ```bash
-cd tools
-
-# 環境変数を設定
-cp .envrc.example .envrc
-# .envrcファイルを編集してSPREADSHEET_IDを設定
-
-# 依存関係のインストール
-go mod download
-
-# インポート実行
-export $(grep -v '^#' .envrc | xargs) && go run import.go
+task import
 ```
 
-成功すると `data/characters.json`、`data/scenario.json`、`data/title.json` が生成されます。
+成功すると `data/` 以下に `characters.json`、`scenario.json`、`title.json` が生成されます。
+
+**Note:** direnvを使わない場合は、手動で環境変数をエクスポートしてから `go run tools/import/import.go` を実行してください。
+
+## 配布用ファイルの作成
+
+ゲームを配布する場合、必要なファイルをまとめたzipファイルを作成できます。
+
+```bash
+# zipファイルを作成
+task package
+
+# 作成されたzipの内容を確認
+task list
+
+# zipファイルを削除
+task clean
+```
+
+`task package` を実行すると、`release.zip` が作成され、以下のファイルが含まれます。
+
+- index.html
+- js/
+- css/
+- assets/
+- data/
+
+**Note:** `credentials.json`、`.envrc` などの設定ファイルは含まれません。
 
 ## 画像の準備
 
