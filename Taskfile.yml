@@ -1,0 +1,43 @@
+version: '3'
+
+tasks:
+  default:
+    desc: デフォルトのタスクです。
+    cmds:
+      - task --list
+
+  package:
+    desc: zipファイルを作成
+    cmds:
+      - rm -f release.zip
+      - zip release.zip index.html js/* css/* assets/* data/*
+      - echo "✓ release.zip を作成しました"
+      - unzip -l release.zip
+
+  clean:
+    desc: zipファイルを削除
+    cmds:
+      - rm -f eval-ranking-extension.zip
+      - echo "✓ eval-ranking-extension.zip を削除しました"
+
+  list:
+    desc: zipファイルの内容を確認
+    cmds:
+      - |
+        if [ -f release.zip ]; then
+          unzip -l release.zip
+        else
+          echo "release.zip が見つかりません。task package を実行してください。"
+        fi
+
+  serve:
+    desc: 動作確認用のローカルサーバを起動 (http://localhost:8000)
+    cmds:
+      - 'echo "✓ ローカルサーバを起動しました: http://localhost:8000"'
+      - 'echo "  終了するには Ctrl+C を押してください"'
+      - python3 -m http.server 8000
+
+  import:
+    desc: スプレッドシートのデータをインポートする
+    cmds:
+      - go run tools/import/import.go

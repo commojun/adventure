@@ -239,7 +239,7 @@ func saveCharactersJSON(characters map[string]Character) error {
 		return err
 	}
 
-	outputPath := "../data/characters.json"
+	outputPath := "./data/characters.json"
 	if err := os.WriteFile(outputPath, data, 0644); err != nil {
 		return err
 	}
@@ -255,7 +255,7 @@ func saveScenariosJSON(scenarios []Scenario) error {
 		return err
 	}
 
-	outputPath := "../data/scenario.json"
+	outputPath := "./data/scenario.json"
 	if err := os.WriteFile(outputPath, data, 0644); err != nil {
 		return err
 	}
@@ -300,7 +300,7 @@ func saveTitleJSON(title Title) error {
 		return err
 	}
 
-	outputPath := "../data/title.json"
+	outputPath := "./data/title.json"
 	if err := os.WriteFile(outputPath, data, 0644); err != nil {
 		return err
 	}

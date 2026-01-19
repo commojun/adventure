@@ -1,7 +1,7 @@
 # Google Cloud認証情報
-tools/credentials.json
-tools/.env
-tools/.envrc
+credentials.json
+.env
+.envrc
 
 # 画像ファイル（サイズが大きいため）
 # 必要に応じてコメントアウト
@@ -22,4 +22,4 @@ tools/.envrc
 *.log
 
 # Go
-tools/go.sum
+go.sum

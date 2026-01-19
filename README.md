@@ -183,7 +183,7 @@ choices シート:
 1. [Google Cloud Console](https://console.cloud.google.com/)でプロジェクトを作成
 2. Google Sheets API を有効化
 3. サービスアカウントを作成し、JSONキーをダウンロード
-4. ダウンロードしたJSONファイルを `tools/credentials.json` として保存
+4. ダウンロードしたJSONファイルをプロジェクトルートに `credentials.json` として保存
 5. スプレッドシートをサービスアカウントのメールアドレスと共有
 
 ### 4. インポートスクリプトの実行
