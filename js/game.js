@@ -496,7 +496,7 @@ class CharacterManager {
             setTimeout(() => {
                 element.classList.remove('slide');
                 element.classList.add('visible');
-            }, 50);
+            }, 300);
         } else if (effect === 'fade') {
             element.classList.remove('slide', 'visible');
             setTimeout(() => {
