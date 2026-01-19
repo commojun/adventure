@@ -10,7 +10,7 @@ tasks:
     desc: zipファイルを作成
     cmds:
       - rm -f release.zip
-      - zip release.zip index.html js/* css/* assets/* data/*
+      - zip -r release.zip index.html js css images data
       - echo "✓ release.zip を作成しました"
       - unzip -l release.zip
 

@@ -2,16 +2,16 @@
   "char001": {
     "id": "char001",
     "name": "太郎",
-    "image_path": "assets/images/characters/taro.png"
+    "image_path": "images/characters/taro.png"
   },
   "char002": {
     "id": "char002",
     "name": "花子",
-    "image_path": "assets/images/characters/hanako.png"
+    "image_path": "images/characters/hanako.png"
   },
   "char003": {
     "id": "char003",
     "name": "次郎",
-    "image_path": "assets/images/characters/jiro.png"
+    "image_path": "images/characters/jiro.png"
   }
 }

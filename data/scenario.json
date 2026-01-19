@@ -6,7 +6,7 @@
     "text": "-",
     "position": "-",
     "effect": "-",
-    "background": "assets/images/backgrounds/title.jpg",
+    "background": "images/backgrounds/title.jpg",
     "next_scene": "-"
   },
   {
@@ -26,7 +26,7 @@
     "text": "-",
     "position": "-",
     "effect": "-",
-    "background": "assets/images/backgrounds/classroom.png",
+    "background": "images/backgrounds/classroom.png",
     "next_scene": "-"
   },
   {
@@ -206,7 +206,7 @@
     "text": "そして、体育祭の日がやってきた...",
     "position": "-",
     "effect": "-",
-    "background": "assets/images/backgrounds/schoolyard.png",
+    "background": "images/backgrounds/schoolyard.png",
     "next_scene": "-"
   },
   {
