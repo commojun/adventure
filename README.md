@@ -52,10 +52,9 @@ adventure/
 │   ├── title.json         # タイトル設定
 │   ├── characters.json    # キャラクターマスタ
 │   └── scenario.json      # シナリオデータ
-├── assets/
-│   └── images/
-│       ├── characters/    # キャラクター画像
-│       └── backgrounds/   # 背景画像
+├── images/
+│   ├── characters/        # キャラクター画像
+│   └── backgrounds/       # 背景画像
 └── tools/
     └── import/
         └── import.go      # インポートスクリプト
@@ -81,7 +80,7 @@ task serve
 
 | title | background |
 |-------|------------|
-| アドベンチャーゲーム | assets/images/backgrounds/title.jpg |
+| アドベンチャーゲーム | images/backgrounds/title.jpg |
 
 **カラム説明:**
 - `title`: ゲームのタイトル（タイトル画面に表示）
@@ -93,9 +92,9 @@ task serve
 
 | id | name | image_path |
 |----|------|------------|
-| char001 | 太郎 | assets/images/characters/taro.png |
-| char002 | 花子 | assets/images/characters/hanako.png |
-| char003 | 次郎 | assets/images/characters/jiro.png |
+| char001 | 太郎 | images/characters/taro.png |
+| char002 | 花子 | images/characters/hanako.png |
+| char003 | 次郎 | images/characters/jiro.png |
 
 **カラム説明:**
 - `id`: キャラクターの一意なID
@@ -106,7 +105,7 @@ task serve
 
 | scene_id | type | character_id | text | position | effect | background | next_scene |
 |----------|------|--------------|------|----------|--------|------------|------------|
-|  | dialogue | char001 | こんにちは！ | center | slide | assets/images/backgrounds/classroom.jpg |  |
+|  | dialogue | char001 | こんにちは！ | center | slide | images/backgrounds/classroom.jpg |  |
 |  | dialogue | char002 | 元気？ | left | shake | - |  |
 |  | hide_character | - | | center | slide | - |  |
 | question1 | choice | - | | - | - | - |  |
@@ -255,7 +254,7 @@ task clean
 - index.html
 - js/
 - css/
-- assets/
+- images/
 - data/
 
 **Note:** `credentials.json`、`.envrc` などの設定ファイルは含まれません。
@@ -263,12 +262,12 @@ task clean
 ## 画像の準備
 
 ### キャラクター画像
-- パス: `assets/images/characters/`
+- パス: `images/characters/`
 - 推奨サイズ: 400px × 600px（縦長）
 - 形式: PNG（背景透過推奨）
 
 ### 背景画像
-- パス: `assets/images/backgrounds/`
+- パス: `images/backgrounds/`
 - 推奨サイズ: 1920px × 1080px
 - 形式: JPG または PNG
 
@@ -283,7 +282,7 @@ task clean
 ```json
 {
   "title": "あなたのゲームタイトル",
-  "background": "assets/images/backgrounds/title.jpg"
+  "background": "images/backgrounds/title.jpg"
 }
 ```
 
@@ -293,7 +292,7 @@ task clean
 
 | title | background |
 |-------|------------|
-| あなたのゲームタイトル | assets/images/backgrounds/title.jpg |
+| あなたのゲームタイトル | images/backgrounds/title.jpg |
 
 **注意:** 背景画像はグラデーションと重ねて表示されます。画像が見えやすいよう、明るめの画像を推奨します。
 
